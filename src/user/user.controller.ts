@@ -7,7 +7,10 @@ import {
   Post,
   Put,
   Query,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import { IUserPayload } from './types/IUserPayload';
 import { IUserResponse } from './types/IUserResponse';
 import { UserService } from './user.service';
@@ -16,6 +19,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthenticatedGuard)
   @Get()
   async getAll(@Query('name') name: string): Promise<IUserResponse[]> {
     if (name) return this.userService.getUsersByName(name);
@@ -27,11 +31,13 @@ export class UserController {
     return this.userService.createUser(payload);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Get(':id')
   async getUserById(@Param('id') id: number): Promise<IUserResponse> {
     return this.userService.getOneById(id);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Put(':id')
   async putUpdateUser(
     @Param('id') id: number,
@@ -41,6 +47,7 @@ export class UserController {
     return this.userService.updateUser(id, username, email);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Delete(':id')
   async deleteUser(@Param('id') id: number): Promise<Object> {
     return this.userService.deleteUser(id);

@@ -55,8 +55,7 @@ export class UserService {
   // only for login
   async getOneByEmail(email: string): Promise<User> {
     try {
-      const user = await this.usersRepository.findOneOrFail({ email });
-      return user;
+      return await this.usersRepository.findOneOrFail({ email });
     } catch {
       throw new NotFoundException(`User with email ${email} does not exist!`);
     }

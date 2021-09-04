@@ -8,11 +8,11 @@ async function bootstrap() {
 
   app.use(
     session({
+      name: 'quid',
       secret: 'this is secret key', //na produkcji się zrobi env
       resave: false,
       saveUninitialized: false,
       cookie: {
-        name: 'qid',
         maxAge: 1000 * 60 * 60 * 15,
       },
     }),

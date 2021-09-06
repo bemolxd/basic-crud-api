@@ -7,10 +7,11 @@ import {
   Post,
   Put,
   Query,
-  Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+
+import { AuthenticatedGuard } from 'src/app/auth/guards/authenticated.guard';
+
 import { IUserPayload } from './types/IUserPayload';
 import { IUserResponse } from './types/IUserResponse';
 import { UserService } from './user.service';

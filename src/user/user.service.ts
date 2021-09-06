@@ -18,10 +18,10 @@ export class UserService {
   ) {}
 
   async getAll(): Promise<IUserResponse[]> {
-    const users = await this.usersRepository
-      .createQueryBuilder()
-      .orderBy('id', 'DESC')
-      .getMany();
+    const users = await this.usersRepository.find({
+      relations: ['posts'],
+      order: { created_at: 'DESC' },
+    });
 
     return users.map((user) => {
       const { password, ...rest } = user;
@@ -31,17 +31,22 @@ export class UserService {
 
   async getOneById(id: number): Promise<IUserResponse> {
     try {
-      return await this.usersRepository.findOneOrFail(id).then((user) => {
-        const { password, ...rest } = user;
-        return rest;
-      });
+      return await this.usersRepository
+        .findOneOrFail(id, { relations: ['posts'] })
+        .then((user) => {
+          const { password, ...rest } = user;
+          return rest;
+        });
     } catch {
       throw new NotFoundException(`User with id ${id} does not exist!`);
     }
   }
 
   async getUsersByName(name: string): Promise<IUserResponse[]> {
-    const users = await this.usersRepository.find();
+    const users = await this.usersRepository.find({
+      relations: ['posts'],
+      order: { created_at: 'DESC' },
+    });
     return users
       .filter((user) =>
         user.username.toLowerCase().includes(name.toLowerCase()),
@@ -67,23 +72,20 @@ export class UserService {
       throw new BadRequestException('Email is not valid');
     }
 
-    if (this.usersRepository.findOne({ username: payload.username })) {
+    if (await this.usersRepository.findOne({ username: payload.username })) {
       throw new BadRequestException('This username is already taken!');
     }
 
-    if (this.usersRepository.findOne({ email: payload.email })) {
+    if (await this.usersRepository.findOne({ email: payload.email })) {
       throw new BadRequestException('This email is already taken');
     }
 
     const hashedPassword = await argon2.hash(payload.password);
 
-    const dto = {
-      username: payload.username,
-      email: payload.email,
+    const user = this.usersRepository.create({
+      ...payload,
       password: hashedPassword,
-    };
-
-    const user = this.usersRepository.create(dto);
+    });
 
     try {
       this.usersRepository.save(user);
@@ -105,10 +107,7 @@ export class UserService {
       throw new BadRequestException('Email is not valid');
     }
 
-    user.username = username;
-    user.email = email;
-
-    return this.usersRepository.save(user);
+    return this.usersRepository.save({ ...user, username, email });
   }
 
   async deleteUser(id: number): Promise<Object> {

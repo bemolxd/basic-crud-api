@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 
 import { AuthenticatedGuard } from 'src/app/auth/guards/authenticated.guard';
+import { RequestObject } from 'src/app/types';
 
 import { PostsService } from './posts.service';
 import { PostPayload, PostResponse } from './types';
@@ -29,14 +30,17 @@ export class PostsController {
   @Post()
   async createPost(
     @Body() payload: PostPayload,
-    @Req() req: any,
+    @Req() req: RequestObject,
   ): Promise<PostResponse> {
     return this.postsService.createPost(req.user.id, payload);
   }
 
   @UseGuards(AuthenticatedGuard)
   @Delete(':id')
-  async deletePost(@Param('id') id: number, @Req() req: any): Promise<Object> {
+  async deletePost(
+    @Param('id') id: number,
+    @Req() req: RequestObject,
+  ): Promise<Object> {
     return this.postsService.deletePost(id, req.user.id);
   }
 
@@ -45,7 +49,7 @@ export class PostsController {
   async updatePost(
     @Param('id') id: number,
     @Body() payload: PostPayload,
-    @Req() req: any,
+    @Req() req: RequestObject,
   ): Promise<PostResponse> {
     return this.postsService.updatePost(id, req.user.id, payload);
   }

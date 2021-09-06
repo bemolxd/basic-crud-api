@@ -7,7 +7,9 @@ import {
   Post,
   Put,
   Req,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import { PostsService } from './posts.service';
 import { PostPayload, PostResponse } from './types';
 
@@ -15,11 +17,13 @@ import { PostPayload, PostResponse } from './types';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @UseGuards(AuthenticatedGuard)
   @Get()
   async getAll(): Promise<PostResponse[]> {
     return this.postsService.getAll();
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Post()
   async createPost(
     @Body() payload: PostPayload,
@@ -28,11 +32,13 @@ export class PostsController {
     return this.postsService.createPost(req.user.id, payload);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Delete(':id')
   async deletePost(@Param('id') id: number): Promise<Object> {
     return this.postsService.deletePost(id);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Put(':id')
   async updatePost(
     @Param('id') id: number,

@@ -3,11 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import * as argon2 from 'argon2';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/db/entities/user.entity';
-import { validateEmail } from 'src/validation';
+import * as argon2 from 'argon2';
 import { Repository } from 'typeorm';
+
+import { User } from 'src/db/entities/user.entity';
+import { validateEmail } from 'src/app/validation';
+
 import { IUserPayload } from './types/IUserPayload';
 import { IUserResponse } from './types/IUserResponse';
 

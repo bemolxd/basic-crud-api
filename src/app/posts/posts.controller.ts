@@ -9,7 +9,9 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+
+import { AuthenticatedGuard } from 'src/app/auth/guards/authenticated.guard';
+
 import { PostsService } from './posts.service';
 import { PostPayload, PostResponse } from './types';
 

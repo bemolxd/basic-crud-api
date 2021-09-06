@@ -34,8 +34,8 @@ export class PostsController {
 
   @UseGuards(AuthenticatedGuard)
   @Delete(':id')
-  async deletePost(@Param('id') id: number): Promise<Object> {
-    return this.postsService.deletePost(id);
+  async deletePost(@Param('id') id: number, @Req() req: any): Promise<Object> {
+    return this.postsService.deletePost(id, req.user.id);
   }
 
   @UseGuards(AuthenticatedGuard)
@@ -43,7 +43,8 @@ export class PostsController {
   async updatePost(
     @Param('id') id: number,
     @Body() payload: PostPayload,
+    @Req() req: any,
   ): Promise<PostResponse> {
-    return this.postsService.updatePost(id, payload);
+    return this.postsService.updatePost(id, req.user.id, payload);
   }
 }

@@ -28,7 +28,7 @@ async function bootstrap() {
     .setVersion('0.1.0')
     .build();
   const docs = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('/', app, docs);
+  SwaggerModule.setup('/docs', app, docs);
 
   app.use(passport.initialize());
   app.use(passport.session());

@@ -9,6 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { AuthenticatedGuard } from 'src/app/auth/guards/authenticated.guard';
 
@@ -16,6 +17,7 @@ import { IUserPayload } from './types/IUserPayload';
 import { IUserResponse } from './types/IUserResponse';
 import { UserService } from './user.service';
 
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}

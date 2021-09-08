@@ -9,6 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { AuthenticatedGuard } from 'src/app/auth/guards/authenticated.guard';
 import { RequestObject } from 'src/app/types';
@@ -16,6 +17,7 @@ import { RequestObject } from 'src/app/types';
 import { PostsService } from './posts.service';
 import { PostPayload, PostResponse } from './types';
 
+@ApiTags('posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}

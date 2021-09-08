@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as session from 'express-session';
 import * as passport from 'passport';
 
@@ -20,6 +21,14 @@ async function bootstrap() {
       },
     }),
   );
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('basic-crud-api')
+    .setDescription('Basic REST API built with NestJS')
+    .setVersion('0.1.0')
+    .build();
+  const docs = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('/docs', app, docs);
 
   app.use(passport.initialize());
   app.use(passport.session());

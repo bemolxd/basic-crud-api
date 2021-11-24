@@ -5,6 +5,7 @@ export interface IUserResponse {
   username: string;
   email: string;
   posts: Post[];
+  friendsIds: string[];
   created_at: string;
   updated_at: string;
 }

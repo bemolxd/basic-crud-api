@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -24,7 +25,8 @@ export class PostsController {
 
   @UseGuards(AuthenticatedGuard)
   @Get()
-  async getAll(): Promise<PostResponse[]> {
+  async getAll(@Query('authorId') authorId: number): Promise<PostResponse[]> {
+    if (authorId) return this.postsService.getPostsByAuthor(authorId);
     return this.postsService.getAll();
   }
 

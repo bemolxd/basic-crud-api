@@ -15,6 +15,7 @@ import { AuthenticatedGuard } from 'src/app/auth/guards/authenticated.guard';
 
 import { IUserPayload } from './types/IUserPayload';
 import { IUserResponse } from './types/IUserResponse';
+import { IEditUserPayload } from './types/IEditUserPayload';
 import { UserService } from './user.service';
 
 @ApiTags('users')
@@ -44,10 +45,9 @@ export class UserController {
   @Put(':id')
   async putUpdateUser(
     @Param('id') id: number,
-    @Body() username: string,
-    @Body() email: string,
+    @Body() payload: IEditUserPayload,
   ): Promise<IUserResponse> {
-    return this.userService.updateUser(id, username, email);
+    return this.userService.updateUser(id, payload);
   }
 
   @UseGuards(AuthenticatedGuard)

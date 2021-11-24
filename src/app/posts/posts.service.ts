@@ -20,6 +20,11 @@ export class PostsService {
     return await this.postsRepository.find({ order: { created_at: 'DESC' } });
   }
 
+  async getPostsByAuthor(authorId: number): Promise<PostResponse[]> {
+    const posts = await this.postsRepository.find({ authorId });
+    return posts;
+  }
+
   async createPost(
     authorId: number,
     payload: PostPayload,

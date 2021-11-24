@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { FriendRequest } from './friendRequest.entity';
 import { Post } from './post.entity';
 
 @Entity()
@@ -24,6 +25,15 @@ export class User {
 
   @OneToMany(() => Post, (task) => task.author, { nullable: true })
   posts: Post[];
+
+  @OneToMany(() => FriendRequest, (fr) => fr.recipientId, { nullable: true })
+  incomingFriendRequests: FriendRequest[];
+
+  @OneToMany(() => FriendRequest, (fr) => fr.senderId, { nullable: true })
+  outgoingFriendRequests: FriendRequest[];
+
+  @Column('text', { nullable: true, array: true, default: [] })
+  friendsIds: string[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: string;

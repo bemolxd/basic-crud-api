@@ -12,6 +12,7 @@ import { validateEmail } from 'src/app/validation';
 
 import { IUserPayload } from './types/IUserPayload';
 import { IUserResponse } from './types/IUserResponse';
+import { IEditUserPayload } from './types/IEditUserPayload';
 
 @Injectable()
 export class UserService {
@@ -100,16 +101,15 @@ export class UserService {
 
   async updateUser(
     id: number,
-    username: string,
-    email: string,
+    payload: IEditUserPayload,
   ): Promise<IUserResponse> {
     const user = await this.getOneById(id);
 
-    if (!validateEmail(email)) {
+    if (!validateEmail(payload.email)) {
       throw new BadRequestException('Email is not valid');
     }
 
-    return this.usersRepository.save({ ...user, username, email });
+    return await this.usersRepository.save({ ...user, ...payload });
   }
 
   async deleteUser(id: number): Promise<Object> {
